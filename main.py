@@ -197,7 +197,11 @@ def prompt_worker(q, server_instance):
             # 执行完成
             data = {
                 "outputs": e.history_result['outputs'],
-                "status": status
+                "status": {
+                    "status_str": 'success' if e.success else 'error',
+                    "completed": e.success,
+                    "messages": e.status_messages
+                }
             }
             task_callback(prompt_id, "TASK_SUCCESS" if e.success else 'TASK_FAIL', data)
             if server_instance.client_id is not None:
