@@ -934,7 +934,7 @@ class PromptQueue:
             self.server.queue_updated()
             # 开始执行
             prompt_id = item[1]
-            task_callback(prompt_id, "RUNNING", None)
+            task_callback(prompt_id, "TASK_RUNNING", None)
             return (item, i)
 
     class ExecutionStatus(NamedTuple):
