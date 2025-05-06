@@ -199,7 +199,7 @@ def prompt_worker(q, server_instance):
                 "outputs": e.history_result['outputs'],
                 "status": status
             }
-            task_callback(prompt_id, "TASK_SUCCESS" if e.success else 'TASK_FAIL', data)
+            # task_callback(prompt_id, "TASK_SUCCESS" if e.success else 'TASK_FAIL', data)
             if server_instance.client_id is not None:
                 server_instance.send_sync("executing", {"node": None, "prompt_id": prompt_id}, server_instance.client_id)
 
