@@ -196,7 +196,6 @@ def prompt_worker(q, server_instance):
                         e.history_result,
                         status=status)
             # 执行完成
-            print(f"task execute done...item_id: {item_id}, history_result: {e.history_result}, status_str: {e.success}, messages: {e.status_messages}")
             data = {
                 "outputs": e.history_result['outputs'],
                 "status": status
