@@ -932,9 +932,9 @@ class PromptQueue:
             self.currently_running[i] = copy.deepcopy(item)
             self.task_counter += 1
             self.server.queue_updated()
-            # todo 新增
-            print(f"task execute start...item: {item}")
-            # generate_status_callback()
+            # 开始执行
+            prompt_id = item[1]
+            task_callback(prompt_id, "RUNNING", None)
             return (item, i)
 
     class ExecutionStatus(NamedTuple):
@@ -945,8 +945,6 @@ class PromptQueue:
     def task_done(self, item_id, history_result,
                   status: Optional['PromptQueue.ExecutionStatus']):
         with self.mutex:
-            # 新增
-            print(f"task execute done...item_id: {item_id}, history_result: {history_result}, status: {status}")
             prompt = self.currently_running.pop(item_id)
             if len(self.history) > MAXIMUM_HISTORY_SIZE:
                 self.history.pop(next(iter(self.history)))
@@ -1032,7 +1030,3 @@ class PromptQueue:
                 return ret
             else:
                 return self.flags.copy()
-
-# todo 新增
-def generate_status_callback(prompt_id: str, status: str):
-    task_callback(prompt_id)

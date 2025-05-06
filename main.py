@@ -11,6 +11,12 @@ import itertools
 import utils.extra_config
 import logging
 import sys
+import json
+
+from pathlib import Path
+proxy_project_path = Path("/home/music-content-ai-generate-proxy")
+sys.path.append(str(proxy_project_path))
+from services.status_callback import task_callback
 
 if __name__ == "__main__":
     #NOTE: These do not do anything on core ComfyUI, they are for custom nodes.
@@ -182,14 +188,20 @@ def prompt_worker(q, server_instance):
 
             e.execute(item[2], prompt_id, item[3], item[4])
             need_gc = True
-            q.task_done(item_id,
-                        e.history_result,
-                        status=execution.PromptQueue.ExecutionStatus(
+            status = execution.PromptQueue.ExecutionStatus(
                             status_str='success' if e.success else 'error',
                             completed=e.success,
-                            messages=e.status_messages))
-            # 新增
-            print(f"ask execute done...prompt_id: {prompt_id}")
+                            messages=e.status_messages)
+            q.task_done(item_id,
+                        e.history_result,
+                        status=status)
+            # 执行完成
+            print(f"task execute done...item_id: {item_id}, history_result: {e.history_result}, status_str: {e.success}, messages: {e.status_messages}")
+            data = {
+                "outputs": e.history_result['outputs'],
+                "status": status
+            }
+            task_callback(prompt_id, "SUCCESS" if e.success else 'FAIL', json.dumps(data))
             if server_instance.client_id is not None:
                 server_instance.send_sync("executing", {"node": None, "prompt_id": prompt_id}, server_instance.client_id)
 
@@ -202,6 +214,7 @@ def prompt_worker(q, server_instance):
 
         if flags.get("unload_models", free_memory):
             comfy.model_management.unload_all_models()
+            print("unload_all_models completed...")
             need_gc = True
             last_gc_collect = 0
 
