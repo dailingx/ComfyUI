@@ -18,6 +18,12 @@ from comfy_execution.graph_utils import is_link, GraphBuilder
 from comfy_execution.caching import HierarchicalCache, LRUCache, DependencyAwareCache, CacheKeySetInputSignature, CacheKeySetID
 from comfy_execution.validation import validate_node_input
 
+from pathlib import Path
+proxy_project_path = Path("/home/music-content-ai-generate-proxy")
+sys.path.append(str(proxy_project_path))
+from services.status_callback import task_callback
+
+
 class ExecutionResult(Enum):
     SUCCESS = 0
     FAILURE = 1
@@ -926,6 +932,9 @@ class PromptQueue:
             self.currently_running[i] = copy.deepcopy(item)
             self.task_counter += 1
             self.server.queue_updated()
+            # todo 新增
+            print(f"task execute start...item: {item}")
+            # generate_status_callback()
             return (item, i)
 
     class ExecutionStatus(NamedTuple):
@@ -936,6 +945,8 @@ class PromptQueue:
     def task_done(self, item_id, history_result,
                   status: Optional['PromptQueue.ExecutionStatus']):
         with self.mutex:
+            # 新增
+            print(f"task execute done...item_id: {item_id}, history_result: {history_result}, status: {status}")
             prompt = self.currently_running.pop(item_id)
             if len(self.history) > MAXIMUM_HISTORY_SIZE:
                 self.history.pop(next(iter(self.history)))
@@ -1021,3 +1032,7 @@ class PromptQueue:
                 return ret
             else:
                 return self.flags.copy()
+
+# todo 新增
+def generate_status_callback(prompt_id: str, status: str):
+    task_callback(prompt_id)

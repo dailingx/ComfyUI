@@ -188,6 +188,8 @@ def prompt_worker(q, server_instance):
                             status_str='success' if e.success else 'error',
                             completed=e.success,
                             messages=e.status_messages))
+            # 新增
+            print(f"ask execute done...prompt_id: {prompt_id}")
             if server_instance.client_id is not None:
                 server_instance.send_sync("executing", {"node": None, "prompt_id": prompt_id}, server_instance.client_id)
 
