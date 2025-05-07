@@ -13,7 +13,7 @@ import logging
 import sys
 
 from pathlib import Path
-proxy_project_path = Path("/home/music-content-ai-generate-proxy")
+proxy_project_path = Path("/home/workspace/music-content-ai-generate-proxy")
 sys.path.append(str(proxy_project_path))
 from services.status_callback import task_callback
 

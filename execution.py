@@ -19,7 +19,7 @@ from comfy_execution.caching import HierarchicalCache, LRUCache, DependencyAware
 from comfy_execution.validation import validate_node_input
 
 from pathlib import Path
-proxy_project_path = Path("/home/music-content-ai-generate-proxy")
+proxy_project_path = Path("/home/workspace/music-content-ai-generate-proxy")
 sys.path.append(str(proxy_project_path))
 from services.status_callback import task_callback
 
