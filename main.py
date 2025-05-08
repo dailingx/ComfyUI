@@ -203,7 +203,10 @@ def prompt_worker(q, server_instance):
                     "messages": e.status_messages
                 }
             }
-            task_callback(prompt_id, "TASK_SUCCESS" if e.success else 'TASK_FAIL', data)
+            try:
+                task_callback(prompt_id, "TASK_SUCCESS" if e.success else 'TASK_FAIL', data)
+            except Exception as e:
+                logging.error(f"status callback error when task finish, prompt_id: {prompt_id}, e: {str(e)}")
             if server_instance.client_id is not None:
                 server_instance.send_sync("executing", {"node": None, "prompt_id": prompt_id}, server_instance.client_id)
 
