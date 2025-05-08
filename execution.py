@@ -933,8 +933,11 @@ class PromptQueue:
             self.task_counter += 1
             self.server.queue_updated()
             # 开始执行
+            # todo
+            logging.info("start callback running")
             prompt_id = item[1]
             task_callback(prompt_id, "TASK_RUNNING", None)
+            logging.info("finish callback running")
             return (item, i)
 
     class ExecutionStatus(NamedTuple):
