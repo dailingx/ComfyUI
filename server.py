@@ -381,6 +381,7 @@ class PromptServer():
                         # alpha copy
                         new_alpha = mask_pil.getchannel('A')
                         original_pil.putalpha(new_alpha)
+                        print(f"save-image 384, metadata: {metadata}")
                         original_pil.save(filepath, compress_level=4, pnginfo=metadata)
 
             return image_upload(post, image_save_function)
