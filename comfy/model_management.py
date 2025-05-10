@@ -442,6 +442,7 @@ class LoadedModel:
         use_more_vram = lowvram_model_memory
         if use_more_vram == 0:
             use_more_vram = 1e32
+        print("test- 445 model_use_more_vram")
         self.model_use_more_vram(use_more_vram, force_patch_weights=force_patch_weights)
         real_model = self.model.model
 
@@ -487,6 +488,7 @@ class LoadedModel:
 def use_more_memory(extra_memory, loaded_models, device):
     for m in loaded_models:
         if m.device == device:
+            print("test- 491 model_use_more_vram")
             extra_memory -= m.model_use_more_vram(extra_memory)
             if extra_memory <= 0:
                 break
