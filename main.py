@@ -190,6 +190,7 @@ def prompt_worker(q, server_instance):
         if need_gc:
             timeout = max(gc_collect_interval - (current_time - last_gc_collect), 0.0)
 
+        print(f"test- 193 queue_item")
         queue_item = q.get(timeout=timeout)
         if queue_item is not None:
             item, item_id = queue_item

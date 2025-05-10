@@ -506,7 +506,7 @@ class PromptExecutor:
         with torch.inference_mode():
             dynamic_prompt = DynamicPrompt(prompt)
             is_changed_cache = IsChangedCache(dynamic_prompt, self.caches.outputs)
-            print(f"test- is_changed_cache: {is_changed_cache}")
+            print(f"test- is_changed_cache: {is_changed_cache.is_changed}")
             for cache in self.caches.all:
                 cache.set_prompt(dynamic_prompt, prompt.keys(), is_changed_cache)
                 cache.clean_unused()
@@ -535,7 +535,7 @@ class PromptExecutor:
                     self.handle_execution_error(prompt_id, dynamic_prompt.original_prompt, current_outputs, executed, error, ex)
                     break
 
-                print(f"test- 5138 execute")
+                print(f"test- 5138 execute, {node_id}, {error}, {ex}")
                 result, error, ex = execute(self.server, dynamic_prompt, self.caches, node_id, extra_data, executed, prompt_id, execution_list, pending_subgraph_results)
                 self.success = result != ExecutionResult.FAILURE
                 if result == ExecutionResult.FAILURE:
