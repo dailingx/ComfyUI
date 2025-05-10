@@ -175,6 +175,7 @@ class CLIP:
             if unprojected:
                 self.cond_stage_model.set_clip_options({"projected_pooled": False})
 
+            print(f"test- 178 load_models_gpu")
             self.load_model()
             all_hooks.reset()
             self.patcher.patch_hooks(None)
@@ -222,6 +223,7 @@ class CLIP:
         if return_pooled == "unprojected":
             self.cond_stage_model.set_clip_options({"projected_pooled": False})
 
+        print(f"test- 226 load_models_gpu")
         self.load_model()
         o = self.cond_stage_model.encode_token_weights(tokens)
         cond, pooled = o[:2]
@@ -255,6 +257,7 @@ class CLIP:
         return sd_clip
 
     def load_model(self):
+        print("ftest- 258 load_model")
         model_management.load_model_gpu(self.patcher)
         return self.patcher
 
@@ -1119,6 +1122,7 @@ def save_checkpoint(output_path, model, clip=None, vae=None, clip_vision=None, m
     clip_sd = None
     load_models = [model]
     if clip is not None:
+        print(f"test- 1125 load_models_gpu")
         load_models.append(clip.load_model())
         clip_sd = clip.get_sd()
     vae_sd = None
