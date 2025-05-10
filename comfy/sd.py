@@ -53,6 +53,7 @@ import comfy.taesd.taesd
 import comfy.ldm.flux.redux
 
 def load_lora_for_models(model, clip, lora, strength_model, strength_clip):
+    print(f"test- load_lora_for_models")
     key_map = {}
     if model is not None:
         key_map = comfy.lora.model_lora_keys_unet(model.model, key_map)
