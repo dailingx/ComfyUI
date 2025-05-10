@@ -219,12 +219,10 @@ def prompt_worker(q, server_instance):
 
         if flags.get("unload_models", free_memory):
             comfy.model_management.unload_all_models()
-            print("unload_all_models completed...")
             need_gc = True
             last_gc_collect = 0
 
         if free_memory:
-            print("free_memory reset...")
             e.reset()
             need_gc = True
             last_gc_collect = 0
@@ -232,7 +230,6 @@ def prompt_worker(q, server_instance):
         if need_gc:
             current_time = time.perf_counter()
             if (current_time - last_gc_collect) > gc_collect_interval:
-                print("gc collect...")
                 gc.collect()
                 comfy.model_management.soft_empty_cache()
                 last_gc_collect = current_time
