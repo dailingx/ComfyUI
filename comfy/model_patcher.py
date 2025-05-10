@@ -812,7 +812,7 @@ class ModelPatcher:
     def partially_load(self, device_to, extra_memory=0, force_patch_weights=False):
         print(f"test- partially_load, model_lowvram: {self.model.model_lowvram}, self.model.model_loaded_weight_memory: {self.model.model_loaded_weight_memory}")
         with self.use_ejected(skip_and_inject_on_exit_only=True):
-            print(f"test- use_ejected")
+            print(f"test- use_ejected, model_lowvram: {self.model.model_lowvram}, self.model.model_loaded_weight_memory: {self.model.model_loaded_weight_memory}")
             unpatch_weights = self.model.current_weight_patches_uuid is not None and (self.model.current_weight_patches_uuid != self.patches_uuid or force_patch_weights)
             # TODO: force_patch_weights should not unload + reload full model
             used = self.model.model_loaded_weight_memory

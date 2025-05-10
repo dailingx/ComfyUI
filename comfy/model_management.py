@@ -570,16 +570,19 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
 
     for x in models:
         loaded_model = LoadedModel(x)
+        print(f"test- loaded_model: {loaded_model}")
         try:
             loaded_model_index = current_loaded_models.index(loaded_model)
         except:
             loaded_model_index = None
 
         if loaded_model_index is not None:
+            print(f"test- loaded_model_index: {loaded_model_index}")
             loaded = current_loaded_models[loaded_model_index]
             loaded.currently_used = True
             models_to_load.append(loaded)
         else:
+            print(f"test- loaded_model_index: {loaded_model_index}")
             if hasattr(x, "model"):
                 logging.info(f"Requested to load {x.model.__class__.__name__}")
             models_to_load.append(loaded_model)
@@ -654,6 +657,7 @@ def cleanup_models_gc():
             break
 
     if do_gc:
+        print(f"test- do_gc: {do_gc}")
         gc.collect()
         soft_empty_cache()
 
