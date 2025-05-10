@@ -224,6 +224,7 @@ def prompt_worker(q, server_instance):
             last_gc_collect = 0
 
         if free_memory:
+            print("free_memory reset...")
             e.reset()
             need_gc = True
             last_gc_collect = 0
@@ -231,6 +232,7 @@ def prompt_worker(q, server_instance):
         if need_gc:
             current_time = time.perf_counter()
             if (current_time - last_gc_collect) > gc_collect_interval:
+                print("gc collect...")
                 gc.collect()
                 comfy.model_management.soft_empty_cache()
                 last_gc_collect = current_time
