@@ -565,21 +565,13 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
         minimum_memory_required = max(inference_memory, minimum_memory_required + extra_reserved_memory())
 
     models = set(models)
-    print(f"test- models: {models}")
+    print(f"test- models: ")
 
     models_to_load = []
 
     for x in models:
         loaded_model = LoadedModel(x)
-        print(f"test- loaded_model: {loaded_model}")
-        # test-
-        for attr in dir(loaded_model):
-            if not attr.startswith('__'):  # 排除魔法方法
-                try:
-                    value = getattr(loaded_model, attr)
-                    print(f"{attr}: {value}")
-                except AttributeError:
-                    print(f"{attr}: (not accessible)")
+        print(f"test- loaded_model x: {x}, {x.model}, {loaded_model.model}, {loaded_model.real_model}, {loaded_model.device}, {loaded_model.currently_used}, {loaded_model.model_finalizer}")
         try:
             loaded_model_index = current_loaded_models.index(loaded_model)
         except:
