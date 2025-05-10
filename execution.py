@@ -22,7 +22,11 @@ from pathlib import Path
 proxy_project_path = Path("/home/workspace/music-content-ai-generate-proxy")
 sys.path.append(str(proxy_project_path))
 from services.status_callback import task_callback
+import concurrent.futures
 
+
+# 创建全局线程池执行器
+running_callback_executor = concurrent.futures.ThreadPoolExecutor()
 
 class ExecutionResult(Enum):
     SUCCESS = 0
@@ -903,6 +907,14 @@ def validate_prompt(prompt):
 
 MAXIMUM_HISTORY_SIZE = 10000
 
+
+def async_task_callback(prompt_id):
+    try:
+        task_callback(prompt_id, "TASK_RUNNING", None)
+    except Exception as e:
+        logging.error(f"status callback error when task running, prompt_id: {prompt_id}, e: {str(e)}")
+
+
 class PromptQueue:
     def __init__(self, server):
         self.server = server
@@ -935,9 +947,10 @@ class PromptQueue:
             # 开始执行
             prompt_id = item[1]
             try:
-                task_callback(prompt_id, "TASK_RUNNING", None)
+                # 异步提交任务
+                running_callback_executor.submit(async_task_callback, prompt_id)
             except Exception as e:
-                logging.error(f"status callback error when task running, prompt_id: {prompt_id}, e: {str(e)}")
+                logging.error(f"Traceback submitting async task for running_callback, prompt_id: {prompt_id}, e: {str(e)}")
             return (item, i)
 
     class ExecutionStatus(NamedTuple):

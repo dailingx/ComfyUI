@@ -16,6 +16,11 @@ from pathlib import Path
 proxy_project_path = Path("/home/workspace/music-content-ai-generate-proxy")
 sys.path.append(str(proxy_project_path))
 from services.status_callback import task_callback
+import concurrent.futures
+
+
+# 创建全局线程池执行器
+done_callback_executor = concurrent.futures.ThreadPoolExecutor()
 
 if __name__ == "__main__":
     #NOTE: These do not do anything on core ComfyUI, they are for custom nodes.
@@ -160,6 +165,13 @@ def cuda_malloc_warning():
             logging.warning("\nWARNING: this card most likely does not support cuda-malloc, if you get \"CUDA error\" please run ComfyUI with: --disable-cuda-malloc\n")
 
 
+def async_task_callback(prompt_id, success, data):
+    try:
+        task_callback(prompt_id, "TASK_SUCCESS" if success else 'TASK_FAIL', data)
+    except Exception as e:
+        logging.error(f"Traceback status callback error when task finish, prompt_id: {prompt_id}, e: {str(e)}")
+
+
 def prompt_worker(q, server_instance):
     current_time: float = 0.0
     cache_type = execution.CacheType.CLASSIC
@@ -204,9 +216,10 @@ def prompt_worker(q, server_instance):
                 }
             }
             try:
-                task_callback(prompt_id, "TASK_SUCCESS" if e.success else 'TASK_FAIL', data)
+                # 异步提交任务
+                done_callback_executor.submit(async_task_callback, prompt_id, e.success, data)
             except Exception as e:
-                logging.error(f"status callback error when task finish, prompt_id: {prompt_id}, e: {str(e)}")
+                logging.error(f"Traceback submitting async task for done_callback, prompt_id: {prompt_id}, e: {str(e)}")
             if server_instance.client_id is not None:
                 server_instance.send_sync("executing", {"node": None, "prompt_id": prompt_id}, server_instance.client_id)
 
