@@ -37,6 +37,7 @@ import importlib
 import folder_paths
 import latent_preview
 import node_helpers
+import uuid
 
 def before_node_execution():
     comfy.model_management.throw_exception_if_processing_interrupted()
@@ -1583,25 +1584,26 @@ class SaveImage:
     DESCRIPTION = "Saves the input images to your ComfyUI output directory."
 
     def save_images(self, images, filename_prefix="ComfyUI", prompt=None, extra_pnginfo=None):
-        filename_prefix += self.prefix_append
+        # filename_prefix += self.prefix_append
+        filename_prefix = str(uuid.uuid4())[:10]
         full_output_folder, filename, counter, subfolder, filename_prefix = folder_paths.get_save_image_path(filename_prefix, self.output_dir, images[0].shape[1], images[0].shape[0])
         results = list()
         for (batch_number, image) in enumerate(images):
             i = 255. * image.cpu().numpy()
             img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
-            metadata = None
-            if not args.disable_metadata:
-                metadata = PngInfo()
-                if prompt is not None:
-                    metadata.add_text("prompt", json.dumps(prompt))
-                if extra_pnginfo is not None:
-                    for x in extra_pnginfo:
-                        metadata.add_text(x, json.dumps(extra_pnginfo[x]))
+            # metadata = None
+            # if not args.disable_metadata:
+            #     metadata = PngInfo()
+            #     if prompt is not None:
+            #         metadata.add_text("prompt", json.dumps(prompt))
+            #     if extra_pnginfo is not None:
+            #         for x in extra_pnginfo:
+            #             metadata.add_text(x, json.dumps(extra_pnginfo[x]))
 
             filename_with_batch_num = filename.replace("%batch_num%", str(batch_number))
             file = f"{filename_with_batch_num}_{counter:05}_.png"
-            print(f"save-image 1603, metadata: {metadata}")
-            img.save(os.path.join(full_output_folder, file), pnginfo=metadata, compress_level=self.compress_level)
+            # img.save(os.path.join(full_output_folder, file), pnginfo=metadata, compress_level=self.compress_level)
+            img.save(os.path.join(full_output_folder, file), compress_level=self.compress_level)
             results.append({
                 "filename": file,
                 "subfolder": subfolder,
