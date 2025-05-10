@@ -506,14 +506,17 @@ class PromptExecutor:
         with torch.inference_mode():
             dynamic_prompt = DynamicPrompt(prompt)
             is_changed_cache = IsChangedCache(dynamic_prompt, self.caches.outputs)
+            print(f"test- is_changed_cache: {is_changed_cache}")
             for cache in self.caches.all:
                 cache.set_prompt(dynamic_prompt, prompt.keys(), is_changed_cache)
                 cache.clean_unused()
+                print(f"test- unused:")
 
             cached_nodes = []
             for node_id in prompt:
                 if self.caches.outputs.get(node_id) is not None:
                     cached_nodes.append(node_id)
+            print(f"test- cached_nodes: {cached_nodes}")
 
             comfy.model_management.cleanup_models_gc()
             self.add_message("execution_cached",
@@ -532,6 +535,7 @@ class PromptExecutor:
                     self.handle_execution_error(prompt_id, dynamic_prompt.original_prompt, current_outputs, executed, error, ex)
                     break
 
+                print(f"test- 5138 execute")
                 result, error, ex = execute(self.server, dynamic_prompt, self.caches, node_id, extra_data, executed, prompt_id, execution_list, pending_subgraph_results)
                 self.success = result != ExecutionResult.FAILURE
                 if result == ExecutionResult.FAILURE:
@@ -947,7 +951,6 @@ class PromptQueue:
             # 开始执行
             prompt_id = item[1]
             print(f"test- 949 running")
-            raise Exception("xx")
             try:
                 # 异步提交任务
                 running_callback_executor.submit(async_task_callback, prompt_id)
