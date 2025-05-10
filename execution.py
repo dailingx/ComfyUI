@@ -335,6 +335,7 @@ def execute(server, dynprompt, caches, current_item, extra_data, executed, promp
                     return (ExecutionResult.PENDING, None, None)
 
             def execution_block_cb(block):
+                print(f"test- 338 execution_block_cb")
                 if block.message is not None:
                     mes = {
                         "prompt_id": prompt_id,
@@ -353,6 +354,7 @@ def execute(server, dynprompt, caches, current_item, extra_data, executed, promp
                 else:
                     return block
             def pre_execute_cb(call_index):
+                print(f"test- 357 pre_execute_cb")
                 GraphBuilder.set_default_prefix(unique_id, call_index, 0)
             output_data, output_ui, has_subgraph = get_output_data(obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb)
         if len(output_ui) > 0:
