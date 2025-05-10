@@ -576,6 +576,7 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
         try:
             loaded_model_index = current_loaded_models.index(loaded_model)
         except:
+            print(f"test- execption")
             loaded_model_index = None
 
         if loaded_model_index is not None:
@@ -636,6 +637,7 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
     return
 
 def load_model_gpu(model):
+    print(f"test- 640 load_model_gpu")
     return load_models_gpu([model])
 
 def loaded_models(only_currently_used=False):
