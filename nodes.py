@@ -1585,7 +1585,7 @@ class SaveImage:
 
     def save_images(self, images, filename_prefix="ComfyUI", prompt=None, extra_pnginfo=None):
         # filename_prefix += self.prefix_append
-        filename_prefix = str(uuid.uuid4())[:10]
+        filename_prefix = str(uuid.uuid4())
         full_output_folder, filename, counter, subfolder, filename_prefix = folder_paths.get_save_image_path(filename_prefix, self.output_dir, images[0].shape[1], images[0].shape[0])
         results = list()
         for (batch_number, image) in enumerate(images):
@@ -1601,7 +1601,7 @@ class SaveImage:
             #             metadata.add_text(x, json.dumps(extra_pnginfo[x]))
 
             filename_with_batch_num = filename.replace("%batch_num%", str(batch_number))
-            file = f"{filename_with_batch_num}_{counter:05}_.png"
+            file = f"{filename_with_batch_num}_{counter}_.png"
             # img.save(os.path.join(full_output_folder, file), pnginfo=metadata, compress_level=self.compress_level)
             img.save(os.path.join(full_output_folder, file), compress_level=self.compress_level)
             results.append({
