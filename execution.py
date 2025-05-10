@@ -946,6 +946,8 @@ class PromptQueue:
             self.server.queue_updated()
             # 开始执行
             prompt_id = item[1]
+            print(f"test- 949 running")
+            raise Exception("xx")
             try:
                 # 异步提交任务
                 running_callback_executor.submit(async_task_callback, prompt_id)
