@@ -702,6 +702,7 @@ class ModelPatcher:
                 full_load = False
 
             if load_weights:
+                print(f"test- 705 will load")
                 self.load(device_to, lowvram_model_memory=lowvram_model_memory, force_patch_weights=force_patch_weights, full_load=full_load)
         self.inject_model()
         return self.model
@@ -826,6 +827,7 @@ class ModelPatcher:
                 full_load = True
             current_used = self.model.model_loaded_weight_memory
             try:
+                print(f"test- 830 will load")
                 self.load(device_to, lowvram_model_memory=current_used + extra_memory, force_patch_weights=force_patch_weights, full_load=full_load)
             except Exception as e:
                 self.detach()

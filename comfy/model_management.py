@@ -422,6 +422,7 @@ class LoadedModel:
         return self.model.model_size()
 
     def model_loaded_memory(self):
+        print(f"test- model_loaded_memory, self.model.loaded_size(): {self.model.loaded_size()}")
         return self.model.loaded_size()
 
     def model_offloaded_memory(self):
@@ -589,6 +590,7 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
         for i in to_unload:
             current_loaded_models.pop(i).model.detach(unpatch_all=False)
 
+    print(f"test- models_to_load: {models_to_load}, to_unload: {to_unload}")
     total_memory_required = {}
     for loaded_model in models_to_load:
         total_memory_required[loaded_model.device] = total_memory_required.get(loaded_model.device, 0) + loaded_model.model_memory_required(loaded_model.device)
