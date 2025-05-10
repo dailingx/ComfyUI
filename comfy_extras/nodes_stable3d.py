@@ -40,6 +40,7 @@ class StableZero123_Conditioning:
     CATEGORY = "conditioning/3d_models"
 
     def encode(self, clip_vision, init_image, vae, width, height, batch_size, elevation, azimuth):
+        print(f"test- 43 load_model_gpu")
         output = clip_vision.encode_image(init_image)
         pooled = output.image_embeds.unsqueeze(0)
         pixels = comfy.utils.common_upscale(init_image.movedim(-1,1), width, height, "bilinear", "center").movedim(1,-1)
@@ -75,6 +76,7 @@ class StableZero123_Conditioning_Batched:
     CATEGORY = "conditioning/3d_models"
 
     def encode(self, clip_vision, init_image, vae, width, height, batch_size, elevation, azimuth, elevation_batch_increment, azimuth_batch_increment):
+        print(f"test- 79 load_model_gpu")
         output = clip_vision.encode_image(init_image)
         pooled = output.image_embeds.unsqueeze(0)
         pixels = comfy.utils.common_upscale(init_image.movedim(-1,1), width, height, "bilinear", "center").movedim(1,-1)
@@ -114,6 +116,7 @@ class SV3D_Conditioning:
     CATEGORY = "conditioning/3d_models"
 
     def encode(self, clip_vision, init_image, vae, width, height, video_frames, elevation):
+        print(f"test- 119 load_model_gpu")
         output = clip_vision.encode_image(init_image)
         pooled = output.image_embeds.unsqueeze(0)
         pixels = comfy.utils.common_upscale(init_image.movedim(-1,1), width, height, "bilinear", "center").movedim(1,-1)
