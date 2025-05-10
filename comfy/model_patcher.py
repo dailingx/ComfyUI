@@ -132,7 +132,7 @@ class LowVramPatch:
         return comfy.lora.calculate_weight(self.patches[self.key], weight, self.key, intermediate_dtype=intermediate_dtype)
 
 def get_key_weight(model, key):
-    print(f"test- get_key_weight {key}")
+    # print(f"test- get_key_weight {key}")
     set_func = None
     convert_func = None
     op_keys = key.rsplit('.', 1)
