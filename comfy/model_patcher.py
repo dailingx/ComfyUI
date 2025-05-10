@@ -810,7 +810,7 @@ class ModelPatcher:
             return memory_freed
 
     def partially_load(self, device_to, extra_memory=0, force_patch_weights=False):
-        print(f"test- partially_load")
+        print(f"test- partially_load, model_lowvram: {self.model.model_lowvram}, self.model.model_loaded_weight_memory: {self.model.model_loaded_weight_memory}")
         with self.use_ejected(skip_and_inject_on_exit_only=True):
             print(f"test- use_ejected")
             unpatch_weights = self.model.current_weight_patches_uuid is not None and (self.model.current_weight_patches_uuid != self.patches_uuid or force_patch_weights)
@@ -823,6 +823,7 @@ class ModelPatcher:
             self.patch_model(load_weights=False)
             full_load = False
             if self.model.model_lowvram == False and self.model.model_loaded_weight_memory > 0:
+                print(f"test- use_ejected return, model_lowvram: {self.model.model_lowvram}, self.model.model_loaded_weight_memory: {self.model.model_loaded_weight_memory}")
                 self.apply_hooks(self.forced_hooks, force_apply=True)
                 return 0
             if self.model.model_loaded_weight_memory + extra_memory > self.model_size():
