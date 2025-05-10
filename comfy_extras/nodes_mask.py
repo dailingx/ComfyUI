@@ -387,7 +387,6 @@ class MaskPreview(nodes.SaveImage):
 
     def execute(self, mask, filename_prefix="ComfyUI", prompt=None, extra_pnginfo=None):
         preview = mask.reshape((-1, 1, mask.shape[-2], mask.shape[-1])).movedim(1, -1).expand(-1, -1, -1, 3)
-        print(f"save-image 390, metadata: {extra_pnginfo}")
         return self.save_images(preview, filename_prefix, prompt, extra_pnginfo)
 
 

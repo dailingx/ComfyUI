@@ -110,15 +110,15 @@ class SaveAnimatedWEBP:
             img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
             pil_images.append(img)
 
-        metadata = pil_images[0].getexif()
-        if not args.disable_metadata:
-            if prompt is not None:
-                metadata[0x0110] = "prompt:{}".format(json.dumps(prompt))
-            if extra_pnginfo is not None:
-                inital_exif = 0x010f
-                for x in extra_pnginfo:
-                    metadata[inital_exif] = "{}:{}".format(x, json.dumps(extra_pnginfo[x]))
-                    inital_exif -= 1
+        # metadata = pil_images[0].getexif()
+        # if not args.disable_metadata:
+        #     if prompt is not None:
+        #         metadata[0x0110] = "prompt:{}".format(json.dumps(prompt))
+        #     if extra_pnginfo is not None:
+        #         inital_exif = 0x010f
+        #         for x in extra_pnginfo:
+        #             metadata[inital_exif] = "{}:{}".format(x, json.dumps(extra_pnginfo[x]))
+        #             inital_exif -= 1
 
         if num_frames == 0:
             num_frames = len(pil_images)
@@ -126,8 +126,7 @@ class SaveAnimatedWEBP:
         c = len(pil_images)
         for i in range(0, c, num_frames):
             file = f"{filename}_{counter:05}_.webp"
-            print(f"save-image 131, metadata: {metadata}")
-            pil_images[i].save(os.path.join(full_output_folder, file), save_all=True, duration=int(1000.0/fps), append_images=pil_images[i + 1:i + num_frames], exif=metadata, lossless=lossless, quality=quality, method=method)
+            pil_images[i].save(os.path.join(full_output_folder, file), save_all=True, duration=int(1000.0/fps), append_images=pil_images[i + 1:i + num_frames], lossless=lossless, quality=quality, method=method)
             results.append({
                 "filename": file,
                 "subfolder": subfolder,
@@ -172,18 +171,17 @@ class SaveAnimatedPNG:
             img = Image.fromarray(np.clip(i, 0, 255).astype(np.uint8))
             pil_images.append(img)
 
-        metadata = None
-        if not args.disable_metadata:
-            metadata = PngInfo()
-            if prompt is not None:
-                metadata.add(b"comf", "prompt".encode("latin-1", "strict") + b"\0" + json.dumps(prompt).encode("latin-1", "strict"), after_idat=True)
-            if extra_pnginfo is not None:
-                for x in extra_pnginfo:
-                    metadata.add(b"comf", x.encode("latin-1", "strict") + b"\0" + json.dumps(extra_pnginfo[x]).encode("latin-1", "strict"), after_idat=True)
+        # metadata = None
+        # if not args.disable_metadata:
+        #     metadata = PngInfo()
+        #     if prompt is not None:
+        #         metadata.add(b"comf", "prompt".encode("latin-1", "strict") + b"\0" + json.dumps(prompt).encode("latin-1", "strict"), after_idat=True)
+        #     if extra_pnginfo is not None:
+        #         for x in extra_pnginfo:
+        #             metadata.add(b"comf", x.encode("latin-1", "strict") + b"\0" + json.dumps(extra_pnginfo[x]).encode("latin-1", "strict"), after_idat=True)
 
         file = f"{filename}_{counter:05}_.png"
-        print(f"save-image 186, metadata: {metadata}")
-        pil_images[0].save(os.path.join(full_output_folder, file), pnginfo=metadata, compress_level=compress_level, save_all=True, duration=int(1000.0/fps), append_images=pil_images[1:])
+        pil_images[0].save(os.path.join(full_output_folder, file), compress_level=compress_level, save_all=True, duration=int(1000.0/fps), append_images=pil_images[1:])
         results.append({
             "filename": file,
             "subfolder": subfolder,
