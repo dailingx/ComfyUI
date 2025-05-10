@@ -935,6 +935,8 @@ class PromptQueue:
             # 开始执行
             prompt_id = item[1]
             try:
+                #todo
+                logging.info("begin task...")
                 task_callback(prompt_id, "TASK_RUNNING", None)
             except Exception as e:
                 logging.error(f"status callback error when task running, prompt_id: {prompt_id}, e: {str(e)}")
