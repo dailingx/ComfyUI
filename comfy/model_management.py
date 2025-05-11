@@ -573,7 +573,7 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
 
     for x in models:
         loaded_model = LoadedModel(x)
-        print(f"test- loaded_model, {loaded_model.device}, {loaded_model.currently_used}, {loaded_model.model_finalizer}")
+        # print(f"test- loaded_model, {loaded_model.device}, {loaded_model.currently_used}, {loaded_model.model_finalizer}")
         print(f"test- current_loaded_models: {current_loaded_models}")
         try:
             loaded_model_index = current_loaded_models.index(loaded_model)

@@ -37,7 +37,8 @@ LORA_CLIP_MAP = {
 def load_lora(lora, to_load, log_missing=True):
     patch_dict = {}
     loaded_keys = set()
-    print(f"test- load_lora, {lora.keys}, {len(to_load)}, {log_missing}")
+    print(f"test- load_lora, {len(to_load)}")
+    print(f"test- load_lora, {log_missing}")
     for x in to_load:
         alpha_name = "{}.alpha".format(x)
         alpha = None
