@@ -545,7 +545,7 @@ def free_memory(memory_required, device, keep_loaded=[]):
             print(f"test- Unloading model")
             unloaded_model.append(i)
 
-    print(f"test- unloaded_model: {len(unloaded_model)}")
+    print(f"test- unloaded_model: {get_models_name(unloaded_model)}")
     for i in sorted(unloaded_model, reverse=True):
         unloaded_models.append(current_loaded_models.pop(i))
 
@@ -556,7 +556,7 @@ def free_memory(memory_required, device, keep_loaded=[]):
             mem_free_total, mem_free_torch = get_free_memory(device, torch_free_too=True)
             if mem_free_torch > mem_free_total * 0.25:
                 soft_empty_cache()
-    print(f"test- unloaded_models: {len(unloaded_models)}")
+    print(f"test- unloaded_models: {get_models_name(unloaded_models)}")
     return unloaded_models
 
 def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimum_memory_required=None, force_full_load=False):
@@ -571,11 +571,12 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
         minimum_memory_required = max(inference_memory, minimum_memory_required + extra_reserved_memory())
 
     models = set(models)
-    print(f"test- models: {get_models_name(current_loaded_models)}")
+    print(f"test- current_loaded_models: {get_models_name(current_loaded_models)}")
 
     models_to_load = []
 
     for x in models:
+        print(f"test- will loadedModel: {x.model.__class__.__name__}")
         loaded_model = LoadedModel(x)
         print(f"test- LoadedModel ok, {loaded_model.model.__class__.__name__}, {loaded_model.device}, {loaded_model.currently_used}, {loaded_model.model_finalizer}")
         print(f"test- current_loaded_models: {get_models_name(current_loaded_models)}")
@@ -604,7 +605,7 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
         for i in to_unload:
             current_loaded_models.pop(i).model.detach(unpatch_all=False)
 
-    print(f"test- models_to_load: {len(models_to_load)}, to_unload: {len(to_unload)}")
+    print(f"test- models_to_load: {get_models_name(models_to_load)}, to_unload: {len(get_models_name(to_unload))}")
     total_memory_required = {}
     for loaded_model in models_to_load:
         total_memory_required[loaded_model.device] = total_memory_required.get(loaded_model.device, 0) + loaded_model.model_memory_required(loaded_model.device)
@@ -619,7 +620,7 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
             free_mem = get_free_memory(device)
             if free_mem < minimum_memory_required:
                 models_l = free_memory(minimum_memory_required, device)
-                print(f"test- models unloaded.".format(len(models_l)))
+                print(f"test- models unloaded.{get_models_name(models_l)}")
                 logging.info("{} models unloaded.".format(len(models_l)))
 
     for loaded_model in models_to_load:

@@ -354,7 +354,7 @@ def execute(server, dynprompt, caches, current_item, extra_data, executed, promp
                 else:
                     return block
             def pre_execute_cb(call_index):
-                print(f"test- 357 pre_execute_cb")
+                # print(f"test- 357 pre_execute_cb")
                 GraphBuilder.set_default_prefix(unique_id, call_index, 0)
             output_data, output_ui, has_subgraph = get_output_data(obj, input_data_all, execution_block_cb=execution_block_cb, pre_execute_cb=pre_execute_cb)
         if len(output_ui) > 0:
@@ -537,7 +537,7 @@ class PromptExecutor:
                     self.handle_execution_error(prompt_id, dynamic_prompt.original_prompt, current_outputs, executed, error, ex)
                     break
 
-                print(f"test- 5138 execute, {node_id}, {error}, {ex}")
+                # print(f"test- 5138 execute, {node_id}, {error}, {ex}")
                 result, error, ex = execute(self.server, dynamic_prompt, self.caches, node_id, extra_data, executed, prompt_id, execution_list, pending_subgraph_results)
                 self.success = result != ExecutionResult.FAILURE
                 if result == ExecutionResult.FAILURE:
