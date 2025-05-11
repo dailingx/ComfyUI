@@ -47,7 +47,6 @@ LORA_TYPES = {"standard": LORAType.STANDARD,
               "full_diff": LORAType.FULL_DIFF}
 
 def calc_lora_model(model_diff, rank, prefix_model, prefix_lora, output_sd, lora_type, bias_diff=False):
-    print(f"test- 50 load_models_gpu")
     comfy.model_management.load_models_gpu([model_diff], force_patch_weights=True)
     sd = model_diff.model_state_dict(filter_prefix=prefix_model)
 

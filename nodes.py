@@ -1004,7 +1004,6 @@ class CLIPVisionEncode:
         crop_image = True
         if crop != "center":
             crop_image = False
-        print(f"test- 1007 load_model_gpu")
         output = clip_vision.encode_image(image, crop=crop_image)
         return (output,)
 

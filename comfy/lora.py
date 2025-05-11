@@ -37,7 +37,6 @@ LORA_CLIP_MAP = {
 def load_lora(lora, to_load, log_missing=True):
     patch_dict = {}
     loaded_keys = set()
-    print(f"test- load_lora, {lora}, {to_load}, {log_missing}")
     for x in to_load:
         alpha_name = "{}.alpha".format(x)
         alpha = None
@@ -174,7 +173,6 @@ def model_lora_keys_clip(model, key_map={}):
     return key_map
 
 def model_lora_keys_unet(model, key_map={}):
-    print(f"test- model_lora_keys_unet")
     sd = model.state_dict()
     sdk = sd.keys()
 

@@ -53,7 +53,6 @@ import comfy.taesd.taesd
 import comfy.ldm.flux.redux
 
 def load_lora_for_models(model, clip, lora, strength_model, strength_clip):
-    print(f"test- load_lora_for_models")
     key_map = {}
     if model is not None:
         key_map = comfy.lora.model_lora_keys_unet(model.model, key_map)
@@ -176,7 +175,6 @@ class CLIP:
             if unprojected:
                 self.cond_stage_model.set_clip_options({"projected_pooled": False})
 
-            print(f"test- 178 load_models_gpu")
             self.load_model()
             all_hooks.reset()
             self.patcher.patch_hooks(None)
@@ -224,7 +222,6 @@ class CLIP:
         if return_pooled == "unprojected":
             self.cond_stage_model.set_clip_options({"projected_pooled": False})
 
-        print(f"test- 226 load_models_gpu")
         self.load_model()
         o = self.cond_stage_model.encode_token_weights(tokens)
         cond, pooled = o[:2]
@@ -1123,7 +1120,6 @@ def save_checkpoint(output_path, model, clip=None, vae=None, clip_vision=None, m
     clip_sd = None
     load_models = [model]
     if clip is not None:
-        print(f"test- 1125 load_models_gpu")
         load_models.append(clip.load_model())
         clip_sd = clip.get_sd()
     vae_sd = None

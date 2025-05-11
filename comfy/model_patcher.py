@@ -132,7 +132,6 @@ class LowVramPatch:
         return comfy.lora.calculate_weight(self.patches[self.key], weight, self.key, intermediate_dtype=intermediate_dtype)
 
 def get_key_weight(model, key):
-    # print(f"test- get_key_weight {key}")
     set_func = None
     convert_func = None
     op_keys = key.rsplit('.', 1)
@@ -703,7 +702,6 @@ class ModelPatcher:
                 full_load = False
 
             if load_weights:
-                print(f"test- 705 will load")
                 self.load(device_to, lowvram_model_memory=lowvram_model_memory, force_patch_weights=force_patch_weights, full_load=full_load)
         self.inject_model()
         return self.model
@@ -811,9 +809,7 @@ class ModelPatcher:
             return memory_freed
 
     def partially_load(self, device_to, extra_memory=0, force_patch_weights=False):
-        print(f"test- partially_load, model_lowvram: {self.model.model_lowvram}, self.model.model_loaded_weight_memory: {self.model.model_loaded_weight_memory}")
         with self.use_ejected(skip_and_inject_on_exit_only=True):
-            print(f"test- use_ejected, model_lowvram: {self.model.model_lowvram}, self.model.model_loaded_weight_memory: {self.model.model_loaded_weight_memory}")
             unpatch_weights = self.model.current_weight_patches_uuid is not None and (self.model.current_weight_patches_uuid != self.patches_uuid or force_patch_weights)
             # TODO: force_patch_weights should not unload + reload full model
             used = self.model.model_loaded_weight_memory
@@ -824,14 +820,12 @@ class ModelPatcher:
             self.patch_model(load_weights=False)
             full_load = False
             if self.model.model_lowvram == False and self.model.model_loaded_weight_memory > 0:
-                print(f"test- use_ejected return, model_lowvram: {self.model.model_lowvram}, self.model.model_loaded_weight_memory: {self.model.model_loaded_weight_memory}")
                 self.apply_hooks(self.forced_hooks, force_apply=True)
                 return 0
             if self.model.model_loaded_weight_memory + extra_memory > self.model_size():
                 full_load = True
             current_used = self.model.model_loaded_weight_memory
             try:
-                print(f"test- 830 will load")
                 self.load(device_to, lowvram_model_memory=current_used + extra_memory, force_patch_weights=force_patch_weights, full_load=full_load)
             except Exception as e:
                 self.detach()
