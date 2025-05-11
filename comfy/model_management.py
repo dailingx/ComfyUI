@@ -530,7 +530,7 @@ def free_memory(memory_required, device, keep_loaded=[]):
                 can_unload.append((-shift_model.model_offloaded_memory(), sys.getrefcount(shift_model.model), shift_model.model_memory(), i))
                 shift_model.currently_used = False
 
-    print(f"test- in free_memory, can_unload: {len(can_unload)}, memory_required: {memory_required}, keep_loaded: {len(keep_loaded)}")
+    print(f"test- in free_memory, can_unload: {get_models_name(can_unload)}, memory_required: {memory_required}, keep_loaded: {len(keep_loaded)}")
     for x in sorted(can_unload):
         i = x[-1]
         memory_to_free = None
@@ -542,10 +542,10 @@ def free_memory(memory_required, device, keep_loaded=[]):
         print(f"test- Unloading....")
         logging.debug(f"Unloading {current_loaded_models[i].model.model.__class__.__name__}")
         if current_loaded_models[i].model_unload(memory_to_free):
-            print(f"test- Unloading model")
+            print(f"test- Unloading model append")
             unloaded_model.append(i)
 
-    print(f"test- unloaded_model: {get_models_name(unloaded_model)}")
+    print(f"test- unloaded_model: {unloaded_model}")
     for i in sorted(unloaded_model, reverse=True):
         unloaded_models.append(current_loaded_models.pop(i))
 
@@ -571,7 +571,6 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
         minimum_memory_required = max(inference_memory, minimum_memory_required + extra_reserved_memory())
 
     models = set(models)
-    print(f"test- current_loaded_models: {get_models_name(current_loaded_models)}")
 
     models_to_load = []
 
@@ -579,7 +578,7 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
         print(f"test- will loadedModel: {x.model.__class__.__name__}")
         loaded_model = LoadedModel(x)
         print(f"test- LoadedModel ok, {loaded_model.model.__class__.__name__}, {loaded_model.device}, {loaded_model.currently_used}, {loaded_model.model_finalizer}")
-        print(f"test- current_loaded_models: {get_models_name(current_loaded_models)}")
+        print(f"test- current_loaded_models: {get_models_name(current_loaded_models)}, {current_loaded_models}")
         try:
             loaded_model_index = current_loaded_models.index(loaded_model)
         except:
@@ -645,7 +644,7 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
         print(f"test- loaded_model begin model_load, lowvram_model_memory: {lowvram_model_memory}")
         loaded_model.model_load(lowvram_model_memory, force_patch_weights=force_patch_weights)
         current_loaded_models.insert(0, loaded_model)
-        print(f"test- load over, current_loaded_models: {get_models_name(current_loaded_models)}")
+        print(f"test- load over, current_loaded_models: {get_models_name(current_loaded_models)}. {current_loaded_models}")
     return
 
 
