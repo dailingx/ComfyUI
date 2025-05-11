@@ -605,7 +605,7 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
         for i in to_unload:
             current_loaded_models.pop(i).model.detach(unpatch_all=False)
 
-    print(f"test- models_to_load: {get_models_name(models_to_load)}, to_unload: {get_models_name(to_unload)}")
+    print(f"test- models_to_load: {get_models_name(models_to_load)}, to_unload: {to_unload}")
     total_memory_required = {}
     for loaded_model in models_to_load:
         total_memory_required[loaded_model.device] = total_memory_required.get(loaded_model.device, 0) + loaded_model.model_memory_required(loaded_model.device)
