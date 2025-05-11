@@ -573,7 +573,7 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
 
     for x in models:
         loaded_model = LoadedModel(x)
-        print(f"test- loaded_model, {loaded_model.model}, {loaded_model.real_model}, {loaded_model.device}, {loaded_model.currently_used}, {loaded_model.model_finalizer}")
+        print(f"test- loaded_model, {loaded_model.device}, {loaded_model.currently_used}, {loaded_model.model_finalizer}")
         print(f"test- current_loaded_models: {current_loaded_models}")
         try:
             loaded_model_index = current_loaded_models.index(loaded_model)
@@ -600,7 +600,7 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
         for i in to_unload:
             current_loaded_models.pop(i).model.detach(unpatch_all=False)
 
-    print(f"test- models_to_load: {models_to_load}, to_unload: {to_unload}")
+    print(f"test- models_to_load: {len(models_to_load)}, to_unload: {len(to_unload)}")
     total_memory_required = {}
     for loaded_model in models_to_load:
         total_memory_required[loaded_model.device] = total_memory_required.get(loaded_model.device, 0) + loaded_model.model_memory_required(loaded_model.device)
