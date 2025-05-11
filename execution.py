@@ -23,10 +23,16 @@ proxy_project_path = Path("/home/workspace/music-content-ai-generate-proxy")
 sys.path.append(str(proxy_project_path))
 from services.status_callback import task_callback
 import concurrent.futures
+import atexit
 
 
 # 创建全局线程池执行器
 running_callback_executor = concurrent.futures.ThreadPoolExecutor()
+
+@atexit.register
+def cleanup():
+    running_callback_executor.shutdown(wait=True)
+
 
 class ExecutionResult(Enum):
     SUCCESS = 0
