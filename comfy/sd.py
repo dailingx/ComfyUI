@@ -224,7 +224,7 @@ class CLIP:
         if return_pooled == "unprojected":
             self.cond_stage_model.set_clip_options({"projected_pooled": False})
 
-        print(f"test- 226 load_models_gpu")
+        print(f"test- 226 encode_from_tokens, begin to load_model")
         self.load_model()
         o = self.cond_stage_model.encode_token_weights(tokens)
         cond, pooled = o[:2]
@@ -258,7 +258,7 @@ class CLIP:
         return sd_clip
 
     def load_model(self):
-        print("ftest- 258 load_model")
+        print("test- 258 begin load_model_gpu")
         model_management.load_model_gpu(self.patcher)
         return self.patcher
 
