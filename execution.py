@@ -22,17 +22,17 @@ from pathlib import Path
 proxy_project_path = Path("/home/workspace/music-content-ai-generate-proxy")
 sys.path.append(str(proxy_project_path))
 from services.status_callback import task_callback
-# import concurrent.futures
-# import atexit
-#
-#
-# # 创建全局线程池执行器
-# running_callback_executor = concurrent.futures.ThreadPoolExecutor()
-#
-# @atexit.register
-# def cleanup():
-#     running_callback_executor.shutdown(wait=True)
-#     print("shutdown running_callback_executor.")
+import concurrent.futures
+import atexit
+
+
+# 创建全局线程池执行器
+running_callback_executor = concurrent.futures.ThreadPoolExecutor()
+
+@atexit.register
+def cleanup():
+    running_callback_executor.shutdown(wait=True)
+    print("shutdown running_callback_executor.")
 
 
 class ExecutionResult(Enum):
@@ -956,8 +956,8 @@ class PromptQueue:
             prompt_id = item[1]
             try:
                 # 异步提交任务
-                # running_callback_executor.submit(async_task_callback, prompt_id)
-                async_task_callback(prompt_id)
+                running_callback_executor.submit(async_task_callback, prompt_id)
+                # async_task_callback(prompt_id)
             except Exception as e:
                 logging.error(f"Traceback submitting async task for running_callback, prompt_id: {prompt_id}, e: {str(e)}")
             return (item, i)

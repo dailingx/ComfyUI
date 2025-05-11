@@ -16,17 +16,17 @@ from pathlib import Path
 proxy_project_path = Path("/home/workspace/music-content-ai-generate-proxy")
 sys.path.append(str(proxy_project_path))
 from services.status_callback import task_callback
-# import concurrent.futures
-# import atexit
-#
-#
-# # 创建全局线程池执行器(日志打印有滞后性)
-# done_callback_executor = concurrent.futures.ThreadPoolExecutor()
-#
-# @atexit.register
-# def cleanup():
-#     done_callback_executor.shutdown(wait=True)
-#     print("shutdown done_callback_executor.")
+import concurrent.futures
+import atexit
+
+
+# 创建全局线程池执行器(日志打印有滞后性)
+done_callback_executor = concurrent.futures.ThreadPoolExecutor()
+
+@atexit.register
+def cleanup():
+    done_callback_executor.shutdown(wait=True)
+    print("shutdown done_callback_executor.")
 
 
 if __name__ == "__main__":
@@ -231,8 +231,8 @@ def prompt_worker(q, server_instance):
             execution_time = current_time - execution_start_time
             try:
                 # 异步提交任务
-                # done_callback_executor.submit(async_task_callback, prompt_id, e.success, data, execution_time)
-                async_task_callback(prompt_id, e.success, data, execution_time)
+                done_callback_executor.submit(async_task_callback, prompt_id, e.success, data, execution_time)
+                # async_task_callback(prompt_id, e.success, data, execution_time)
             except Exception as e:
                 logging.error(f"Traceback submitting async task for done_callback, prompt_id: {prompt_id}, e: {str(e)}")
             logging.info("Prompt executed in {:.2f} seconds".format(execution_time))
