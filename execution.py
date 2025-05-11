@@ -518,7 +518,7 @@ class PromptExecutor:
             for node_id in prompt:
                 if self.caches.outputs.get(node_id) is not None:
                     cached_nodes.append(node_id)
-            print(f"test- cached_nodes: {cached_nodes}")
+            # print(f"test- cached_nodes: {cached_nodes}")
 
             comfy.model_management.cleanup_models_gc()
             self.add_message("execution_cached",
