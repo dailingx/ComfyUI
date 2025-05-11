@@ -255,7 +255,6 @@ class CLIP:
         return sd_clip
 
     def load_model(self):
-        print("ftest- 258 load_model")
         model_management.load_model_gpu(self.patcher)
         return self.patcher
 
