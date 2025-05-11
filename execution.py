@@ -32,6 +32,7 @@ running_callback_executor = concurrent.futures.ThreadPoolExecutor()
 @atexit.register
 def cleanup():
     running_callback_executor.shutdown(wait=True)
+    print("shutdown running_callback_executor.")
 
 
 class ExecutionResult(Enum):

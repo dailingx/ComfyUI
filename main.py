@@ -26,6 +26,7 @@ done_callback_executor = concurrent.futures.ThreadPoolExecutor()
 @atexit.register
 def cleanup():
     done_callback_executor.shutdown(wait=True)
+    print("shutdown done_callback_executor.")
 
 
 if __name__ == "__main__":
