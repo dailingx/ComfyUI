@@ -651,7 +651,7 @@ def load_models_gpu(models, memory_required=0, force_patch_weights=False, minimu
 def get_models_name(models):
     names = []
     for x in models:
-        names.append(x.model.__class__.__name__)
+        names.append(x.model.model.__class__.__name__)
     return names
 
 
