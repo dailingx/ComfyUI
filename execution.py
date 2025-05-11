@@ -917,7 +917,7 @@ MAXIMUM_HISTORY_SIZE = 10000
 
 def async_task_callback(prompt_id):
     try:
-        task_callback(prompt_id, "TASK_RUNNING", None)
+        task_callback(prompt_id, "TASK_RUNNING", None, None)
     except Exception as e:
         logging.error(f"status callback error when task running, prompt_id: {prompt_id}, e: {str(e)}")
 
