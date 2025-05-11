@@ -530,7 +530,7 @@ def free_memory(memory_required, device, keep_loaded=[]):
                 can_unload.append((-shift_model.model_offloaded_memory(), sys.getrefcount(shift_model.model), shift_model.model_memory(), i))
                 shift_model.currently_used = False
 
-    print(f"test- in free_memory, can_unload: {get_models_name(can_unload)}, memory_required: {memory_required}, keep_loaded: {len(keep_loaded)}")
+    print(f"test- in free_memory, can_unload: {can_unload}, memory_required: {memory_required}, keep_loaded: {len(keep_loaded)}")
     for x in sorted(can_unload):
         i = x[-1]
         memory_to_free = None
