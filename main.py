@@ -174,7 +174,9 @@ def cuda_malloc_warning():
 
 def async_task_callback(prompt_id, success, data, execution_time):
     try:
-        task_callback(prompt_id, "TASK_SUCCESS" if success else 'TASK_FAIL', data, execution_time)
+        status = "TASK_SUCCESS" if success else 'TASK_FAIL'
+        task_callback(prompt_id, status, data, execution_time)
+        logging.info(f"Task Callback completed, prompt_id: {prompt_id}, status: {status}")
     except Exception as e:
         logging.error(f"Traceback status callback error when task finish, prompt_id: {prompt_id}, e: {str(e)}")
 
@@ -222,18 +224,17 @@ def prompt_worker(q, server_instance):
                     "messages": e.status_messages
                 }
             }
-            async_task_callback(prompt_id, e.success, data, 0)
             if server_instance.client_id is not None:
                 server_instance.send_sync("executing", {"node": None, "prompt_id": prompt_id}, server_instance.client_id)
 
             current_time = time.perf_counter()
             execution_time = current_time - execution_start_time
-            # try:
-            #     # 异步提交任务
-            #     # done_callback_executor.submit(async_task_callback, prompt_id, e.success, data, execution_time)
-            #     async_task_callback(prompt_id, e.success, data, execution_time)
-            # except Exception as e:
-            #     logging.error(f"Traceback submitting async task for done_callback, prompt_id: {prompt_id}, e: {str(e)}")
+            try:
+                # 异步提交任务
+                # done_callback_executor.submit(async_task_callback, prompt_id, e.success, data, execution_time)
+                async_task_callback(prompt_id, e.success, data, execution_time)
+            except Exception as e:
+                logging.error(f"Traceback submitting async task for done_callback, prompt_id: {prompt_id}, e: {str(e)}")
             logging.info("Prompt executed in {:.2f} seconds".format(execution_time))
 
         flags = q.get_flags()
