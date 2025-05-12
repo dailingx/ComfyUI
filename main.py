@@ -175,8 +175,8 @@ def cuda_malloc_warning():
 def async_task_callback(prompt_id, success, data, execution_time):
     try:
         status = "TASK_SUCCESS" if success else 'TASK_FAIL'
-        task_callback(prompt_id, status, data, execution_time)
-        logging.info(f"Task Callback completed, prompt_id: {prompt_id}, status: {status}")
+        gpu_uuid = task_callback(prompt_id, status, data, execution_time)
+        logging.info(f"Task Callback completed, prompt_id: {prompt_id}, status: {status}, gpu_uuid: {gpu_uuid}")
     except Exception as e:
         logging.error(f"Traceback status callback error when task finish, prompt_id: {prompt_id}, e: {str(e)}")
 
